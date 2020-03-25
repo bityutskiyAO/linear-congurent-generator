@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/m1707760/CLionProjects/paralel-lab1/GeneratorEvaluation.cpp
+GeneratorEvaluation.h
+C:/Users/m1707760/CLionProjects/paralel-lab1/GeneratorEvaluation.h
+vector
+-
+set
+-
+
+C:/Users/m1707760/CLionProjects/paralel-lab1/GeneratorEvaluation.h
+LCG.h
+C:/Users/m1707760/CLionProjects/paralel-lab1/LCG.h
+
+C:/Users/m1707760/CLionProjects/paralel-lab1/LCG.cpp
+LCG.h
+C:/Users/m1707760/CLionProjects/paralel-lab1/LCG.h
+
+C:/Users/m1707760/CLionProjects/paralel-lab1/LCG.h
+vector
+-
+cmath
+-
+iostream
+-
+algorithm
+-
+
+C:/Users/m1707760/CLionProjects/paralel-lab1/main.cpp
+iostream
+-
+omp.h
+-
+GeneratorEvaluation.h
+C:/Users/m1707760/CLionProjects/paralel-lab1/GeneratorEvaluation.h
+
