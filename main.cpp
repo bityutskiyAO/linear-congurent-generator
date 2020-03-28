@@ -1,6 +1,6 @@
 #include <iostream>
 #include "GeneratorEvaluation.h"
-
+#include <omp.h>
 using namespace std;
 
 vector<double> getXiSquareTheoretical(GeneratorEvaluation& generatorEvaluation, double freedom, vector<double> quantiles) {
@@ -14,61 +14,58 @@ vector<double> getXiSquareTheoretical(GeneratorEvaluation& generatorEvaluation, 
 }
 
 int main() {
-    GeneratorEvaluation generatorEvaluation;
-    LCG lcg;
-    double freedom = lcg.getConstant();
+    GeneratorEvaluation generatorEvaluation1;
     /*Frequency test checking*/
-    vector<double> quantiles = {0.01, 0.1, 0.9, 0.99};
-    vector<double> xiSquareTest1 = getXiSquareTheoretical(generatorEvaluation, freedom - 1, quantiles);
-    double frequencyTestResult = generatorEvaluation.frequencyCriterionTest();
-    cout << "Frequency criterion test. V1 = " << frequencyTestResult << endl;
-    cout << "Checking with theoretical xi-square: " << endl;
-    if (frequencyTestResult > xiSquareTest1[0] || frequencyTestResult < xiSquareTest1[3]) {
-        cout << "Test №1 failed" << endl;
-    } else if ((frequencyTestResult < xiSquareTest1[0] && frequencyTestResult > xiSquareTest1[1]) || (frequencyTestResult < xiSquareTest1[2] && frequencyTestResult > xiSquareTest1[3])) {
-        cout << "Result aproximately good" << endl;
-    } else if (frequencyTestResult < xiSquareTest1[1] && frequencyTestResult > xiSquareTest1[2]) {
-        cout << "Test passed" << endl;
-    }
+    double firstTestStart = omp_get_wtime();
+    double frequencyTestResult = generatorEvaluation1.frequencyCriterionTest();
+    double firstTestEnd = omp_get_wtime();
+    cout << "Sequentially Frequency criterion test: " << frequencyTestResult << endl;
+    cout <<"Sequentially Frequency test duration: " << firstTestEnd - firstTestStart << endl ;
+    cout << endl;
+
+    GeneratorEvaluation parallelGeneratorEvaluation;
+    double parallelFirstTestStart = omp_get_wtime();
+    double parallelFrequencyTestResult = parallelGeneratorEvaluation.parallelFrequencyCriterionTest();
+    double parallelFirstTestEnd = omp_get_wtime();
+    cout << "Parallel Frequency criterion test: " << parallelFrequencyTestResult << endl;
+    cout <<"Parallel Frequency test duration: " << parallelFirstTestEnd - parallelFirstTestStart << endl ;
+    cout << endl;
     /*---------------------------------------------------------------------*/
     /*Serial test checking*/
-    vector<double> xiSquareTest2 = getXiSquareTheoretical(generatorEvaluation, freedom * freedom - 1, quantiles);
-    double serialTestResult = generatorEvaluation.serialCriterionTest();
-    cout << "Serial criterion test. V2 = " << serialTestResult << endl;
-    cout << "Checking with theoretical xi-square: " << endl;
-    if (serialTestResult > xiSquareTest2[0] || serialTestResult < xiSquareTest2[3]) {
-        cout << "Test №2 failed" << endl;
-    } else if ((serialTestResult < xiSquareTest2[0] && serialTestResult > xiSquareTest2[1]) || (serialTestResult < xiSquareTest2[2] && serialTestResult > xiSquareTest2[3])) {
-        cout << "Result №2 aproximately good" << endl;
-    } else if (serialTestResult < xiSquareTest2[1] && serialTestResult > xiSquareTest2[2]) {
-        cout << "Test №2 passed" << endl;
-    }
-    /*---------------------------------------------------------------------*/
+    GeneratorEvaluation generatorEvaluation2;
+    double secondTestStart = omp_get_wtime();
+    double serialTestResult = generatorEvaluation2.serialCriterionTest();
+    double secondTestEnd = omp_get_wtime();
+    cout << "Sequentially Serial test result: " << serialTestResult << endl ;
+    cout <<"Sequentially Serial test duration: " << secondTestEnd - secondTestStart << endl ;
+    cout << endl;
 
+    GeneratorEvaluation parallelGeneratorEvaluation2;
+    double parallelSecondTestStart = omp_get_wtime();
+    double parallelSerialTestResult = parallelGeneratorEvaluation2.parallelSerialCriterionTest();
+    double parallelSecondTestEnd = omp_get_wtime();
+    cout << "Parallel Serial criterion test: " << parallelSerialTestResult << endl;
+    cout <<"Parallel Serial test duration: " << parallelSecondTestEnd - parallelSecondTestStart << endl ;
+    cout << endl;
+    /*---------------------------------------------------------------------*/
     /*Interval test checking*/
-    vector<double> xiSquareTest3 = getXiSquareTheoretical(generatorEvaluation, 6, quantiles);
-    double intervalTestResult = generatorEvaluation.intervalCriterionTest(6);
-    cout << "Interval criterion test = " << intervalTestResult << endl;
-    if (intervalTestResult > xiSquareTest3[0] || intervalTestResult < xiSquareTest3[3]) {
-        cout << "Test №3 failed" << endl;
-    } else if ((intervalTestResult < xiSquareTest3[0] && intervalTestResult > xiSquareTest3[1]) || (intervalTestResult < xiSquareTest3[2] && intervalTestResult > xiSquareTest3[3])) {
-        cout << "Result №3 aproximately good" << endl;
-    } else if (intervalTestResult < xiSquareTest3[1] && intervalTestResult > xiSquareTest3[2]) {
-        cout << "Test №3 passed" << endl;
-    }
+    GeneratorEvaluation generatorEvaluation3;
+    double thirdTestStart = omp_get_wtime();
+    double intervalTestResult = generatorEvaluation3.intervalCriterionTest(6);
+    double thirdTestEnd = omp_get_wtime();
+    cout << "Interval test result: " << intervalTestResult << endl ;
+    cout <<"Interval test duration: " << thirdTestEnd - thirdTestStart << endl ;
+    cout << endl;
     /*---------------------------------------------------------------------*/
 
+    GeneratorEvaluation generatorEvaluation4;
     /*Poker test checking*/
-    vector<double> xiSquareTest4 = getXiSquareTheoretical(generatorEvaluation, 4, quantiles);
-    double pokerTestResult = generatorEvaluation.pokerCriterionTest();
-    cout << "Poker criterion test = " << pokerTestResult << endl;
-    if (pokerTestResult > xiSquareTest4[0] || pokerTestResult < xiSquareTest4[3]) {
-        cout << "Test №3 failed" << endl;
-    } else if ((pokerTestResult < xiSquareTest4[0] && pokerTestResult > xiSquareTest4[1]) || (pokerTestResult < xiSquareTest4[2] && pokerTestResult > xiSquareTest4[3])) {
-        cout << "Result №3 aproximately good" << endl;
-    } else if (pokerTestResult < xiSquareTest4[1] && pokerTestResult > xiSquareTest4[2]) {
-        cout << "Test №3 passed" << endl;
-    }
+    double fourthTestStart = omp_get_wtime();
+    double pokerTestResult = generatorEvaluation4.pokerCriterionTest();
+    double fourthTestEnd = omp_get_wtime();
+    cout << "Poker test result: " << pokerTestResult << endl ;
+    cout <<"Poker test duration: " << fourthTestEnd - fourthTestStart << endl ;
+    cout << endl;
     /*---------------------------------------------------------------------*/
     return 0;
 }

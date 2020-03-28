@@ -19,6 +19,13 @@ class GeneratorEvaluation {
     double intervalCriterionTest(int64_t t);
     double pokerCriterionTest();
     double theoreticalGoldshteinXiSquare(double freedom, double quantile);
+
+    /*Parallel methods*/
+    double parallelFrequencyCriterionTest();
+    double parallelSerialCriterionTest();
+    double parallelIntervalCriterionTest(int64_t t);
+    double parallelPokerCriterionTest();
+    double parallelTheoreticalGoldshteinXiSquare(double freedom, double quantile);
 };
 
 
