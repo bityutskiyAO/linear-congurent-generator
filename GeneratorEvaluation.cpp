@@ -105,9 +105,12 @@ double GeneratorEvaluation::intervalCriterionTest(const int64_t t) {
         iterator++;
     }
     vector<double> p(t+1, 0);
-    for (int i = 0; i < p.size(); ++i) {
+    double lastProbability = 0;
+    for (int i = 0; i < p.size() - 1; ++i) {
         p[i] = (d-1)/static_cast<double>(pow(d, i + 1));
+        lastProbability += p[i];
     }
+    p[t] = 1 - lastProbability;
     return xiSquaredTest(counter, p, n);
 }
 /*---------------------------------------- Покер критерий ----------------------------------------------------*/

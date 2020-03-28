@@ -1,5 +1,4 @@
 #include <iostream>
-#include <omp.h>
 #include "GeneratorEvaluation.h"
 
 using namespace std;

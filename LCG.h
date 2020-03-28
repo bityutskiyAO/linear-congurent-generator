@@ -14,8 +14,8 @@ using namespace std;
 
 class LCG {
 private:
-    int64_t  m, a, b, currentXi, capacity , n = pow(2, 25);
-    int d = 10;
+    int64_t  m, a, b, currentXi, capacity , n = pow(2, 28);
+    int64_t d = 10;
 public:
     LCG();
     double getPsevdoRandom();
