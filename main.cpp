@@ -1,35 +1,37 @@
 #include <iostream>
 #include "GeneratorEvaluation.h"
 #include <omp.h>
-using namespace std;
 
-vector<double> getXiSquareTheoretical(GeneratorEvaluation& generatorEvaluation, double freedom, vector<double> quantiles) {
-    vector<double> xiSquareTest;
-    for (int i = 0; i < quantiles.size() ; ++i) {
-        xiSquareTest.push_back(generatorEvaluation.theoreticalGoldshteinXiSquare(freedom, quantiles[i]));
-        cout << xiSquareTest[i] << " ";
-    }
-    cout << endl;
-    return xiSquareTest;
-}
+using namespace std;
 
 int main() {
     GeneratorEvaluation generatorEvaluation1;
-    /*Frequency test checking*/
-    double firstTestStart = omp_get_wtime();
-    double frequencyTestResult = generatorEvaluation1.frequencyCriterionTest();
-    double firstTestEnd = omp_get_wtime();
-    cout << "Sequentially Frequency criterion test: " << frequencyTestResult << endl;
-    cout <<"Sequentially Frequency test duration: " << firstTestEnd - firstTestStart << endl ;
+    LCG lcg;
+
+    for (int i = 0; i < lcg.getSize(); ++i) {
+        cout << lcg.getPsevdoRandom() << " ";
+    }
     cout << endl;
 
-    GeneratorEvaluation parallelGeneratorEvaluation;
-    double parallelFirstTestStart = omp_get_wtime();
-    double parallelFrequencyTestResult = parallelGeneratorEvaluation.parallelFrequencyCriterionTest();
-    double parallelFirstTestEnd = omp_get_wtime();
-    cout << "Parallel Frequency criterion test: " << parallelFrequencyTestResult << endl;
-    cout <<"Parallel Frequency test duration: " << parallelFirstTestEnd - parallelFirstTestStart << endl ;
+    for (int i = 0; i < lcg.getSize()/2; ++i) {
+        cout << lcg.getTransitionPsevdoRandom() << " ";
+    }
     cout << endl;
+    /*Frequency test checking*/
+//    double firstTestStart = omp_get_wtime();
+//    double frequencyTestResult = generatorEvaluation1.frequencyCriterionTest();
+//    double firstTestEnd = omp_get_wtime();
+//    cout << "Sequentially Frequency criterion test: " << frequencyTestResult << endl;
+//    cout <<"Sequentially Frequency test duration: " << firstTestEnd - firstTestStart << endl ;
+//    cout << endl;
+//
+//    GeneratorEvaluation parallelGeneratorEvaluation;
+//    double parallelFirstTestStart = omp_get_wtime();
+//    double parallelFrequencyTestResult = parallelGeneratorEvaluation.parallelFrequencyCriterionTest();
+//    double parallelFirstTestEnd = omp_get_wtime();
+//    cout << "Parallel Frequency criterion test: " << parallelFrequencyTestResult << endl;
+//    cout <<"Parallel Frequency test duration: " << parallelFirstTestEnd - parallelFirstTestStart << endl ;
+//    cout << endl;
     /*---------------------------------------------------------------------*/
     /*Serial test checking*/
     GeneratorEvaluation generatorEvaluation2;
@@ -49,23 +51,23 @@ int main() {
     cout << endl;
     /*---------------------------------------------------------------------*/
     /*Interval test checking*/
-    GeneratorEvaluation generatorEvaluation3;
-    double thirdTestStart = omp_get_wtime();
-    double intervalTestResult = generatorEvaluation3.intervalCriterionTest(6);
-    double thirdTestEnd = omp_get_wtime();
-    cout << "Interval test result: " << intervalTestResult << endl ;
-    cout <<"Interval test duration: " << thirdTestEnd - thirdTestStart << endl ;
-    cout << endl;
-    /*---------------------------------------------------------------------*/
-
-    GeneratorEvaluation generatorEvaluation4;
-    /*Poker test checking*/
-    double fourthTestStart = omp_get_wtime();
-    double pokerTestResult = generatorEvaluation4.pokerCriterionTest();
-    double fourthTestEnd = omp_get_wtime();
-    cout << "Poker test result: " << pokerTestResult << endl ;
-    cout <<"Poker test duration: " << fourthTestEnd - fourthTestStart << endl ;
-    cout << endl;
+//    GeneratorEvaluation generatorEvaluation3;
+//    double thirdTestStart = omp_get_wtime();
+//    double intervalTestResult = generatorEvaluation3.intervalCriterionTest(6);
+//    double thirdTestEnd = omp_get_wtime();
+//    cout << "Interval test result: " << intervalTestResult << endl ;
+//    cout <<"Interval test duration: " << thirdTestEnd - thirdTestStart << endl ;
+//    cout << endl;
+//    /*---------------------------------------------------------------------*/
+//
+//    GeneratorEvaluation generatorEvaluation4;
+//    /*Poker test checking*/
+//    double fourthTestStart = omp_get_wtime();
+//    double pokerTestResult = generatorEvaluation4.pokerCriterionTest();
+//    double fourthTestEnd = omp_get_wtime();
+//    cout << "Poker test result: " << pokerTestResult << endl ;
+//    cout <<"Poker test duration: " << fourthTestEnd - fourthTestStart << endl ;
+//    cout << endl;
     /*---------------------------------------------------------------------*/
     return 0;
 }

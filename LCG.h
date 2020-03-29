@@ -14,12 +14,15 @@ using namespace std;
 
 class LCG {
 private:
-    int64_t  m, a, b, currentXi, capacity , n = 100000;
+    int64_t  m, a, b, currentXi, currentXni, capacity, Xo , n = 100;
     int64_t d = 10;
 public:
     LCG();
     double getPsevdoRandom();
+    double getTransitionPsevdoRandom();
     vector<int64_t> getElementFrequency(int64_t size);
+    int64_t modPow(int64_t a, int64_t n, int64_t m);
+    void transitionProcedure();
     int64_t getConstant();
     int64_t getSize();
 };

@@ -3,6 +3,7 @@
 //
 
 #include "GeneratorEvaluation.h"
+#include <omp.h>
 #include <vector>
 #include <set>
 using namespace std;
@@ -155,11 +156,31 @@ double GeneratorEvaluation::parallelFrequencyCriterionTest() {
 double GeneratorEvaluation::parallelSerialCriterionTest() {
     int d = generator->getConstant();
     int64_t n = generator->getSize();
+    vector<int64_t> counter1(d * d, 0);
+    vector<int64_t> counter2(d * d, 0);
+    #pragma omp parallel sections private(generator)
+    {
+        #pragma omp section 
+        {
+            for (int64_t i = 0; i < n / 2; i++) {
+                int64_t first(static_cast<int64_t>(d * generator->getPsevdoRandom()));
+                int64_t second(static_cast<int64_t>(d * generator->getPsevdoRandom()));
+                counter1[d * first + second] += 1;
+                cout << first << " " << second << endl;
+            }
+        }
+        #pragma omp section
+        {
+            for (int64_t i = 0; i < n / 2; i++) {
+                int64_t first(static_cast<int64_t>(d * generator->getTransitionPsevdoRandom()));
+                int64_t second(static_cast<int64_t>(d * generator->getTransitionPsevdoRandom()));
+                counter2[d * first + second] += 1;
+            }
+        }
+    }
     vector<int64_t> counter(d * d, 0);
-    for (int64_t i = 0; i < n; i++) {
-        int64_t first(static_cast<int64_t>(d*generator->getPsevdoRandom()));
-        int64_t second(static_cast<int64_t>(d*generator->getPsevdoRandom()));
-        counter[d * first + second] += 1;
+    for (int j = 0; j < counter.size(); ++j) {
+        counter[j] = counter1[j] + counter2[j];
     }
     vector<double> p(d * d, 1.0 / (d * d));
     return parallelXiSquaredTest(counter, p, n);
@@ -191,7 +212,6 @@ double GeneratorEvaluation::parallelIntervalCriterionTest(int64_t t) {
 
     vector<double> p(t+1, 0);
     double lastProbability = 0;
-    #pragma omp parallel for
     for (int i = 0; i < p.size() - 1; ++i) {
         p[i] = (d-1)/static_cast<double>(pow(d, i + 1));
         lastProbability += p[i];
