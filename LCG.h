@@ -14,7 +14,7 @@ using namespace std;
 
 class LCG {
 private:
-    int64_t  m, a, b, currentXi, currentXni, capacity, Xo , n = 100;
+    int64_t  m, a, b, currentXi, currentXni, capacity, Xo , n = pow(2, 28);
     int64_t d = 10;
 public:
     LCG();

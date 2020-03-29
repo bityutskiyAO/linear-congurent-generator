@@ -9,9 +9,10 @@
 #include "LCG.h"
 
 class GeneratorEvaluation {
-    private:
-        LCG* generator{ nullptr };
-    public:
+private:
+    LCG* generator1{ nullptr };
+    LCG* generator2{ nullptr };
+public:
     GeneratorEvaluation();
     ~GeneratorEvaluation();
     double frequencyCriterionTest();
@@ -20,7 +21,7 @@ class GeneratorEvaluation {
     double pokerCriterionTest();
     double theoreticalGoldshteinXiSquare(double freedom, double quantile);
 
-    /*Parallel methods*/
+/*Parallel methods*/
     double parallelFrequencyCriterionTest();
     double parallelSerialCriterionTest();
     double parallelIntervalCriterionTest(int64_t t);
